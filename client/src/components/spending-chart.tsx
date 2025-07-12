@@ -36,15 +36,24 @@ export default function SpendingChart() {
 
   const maxSpending = Math.max(...monthlyData.map(d => d.spending));
   const currentMonth = new Date().getMonth() + 1;
+  
+  // Filter out months with no spending for a cleaner view, but always show current month
+  const displayData = monthlyData.filter(d => d.spending > 0 || d.month === currentMonth);
+  
+  // If no data to display, show last 6 months
+  const chartData = displayData.length > 0 ? displayData : monthlyData.slice(-6);
 
   return (
     <Card className="bg-white rounded-xl shadow-sm border border-gray-200">
       <CardContent className="p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-6">Monthly Spending Trends</h3>
         <div className="h-64 flex items-end justify-between space-x-2">
-          {monthlyData.slice(-7).map((data) => {
+          {chartData.map((data) => {
             const heightPercentage = maxSpending > 0 ? (data.spending / maxSpending) * 100 : 0;
             const isCurrentMonth = data.month === currentMonth;
+            
+            // Ensure minimum visible height for bars with spending
+            const displayHeight = data.spending > 0 ? Math.max(heightPercentage, 8) : heightPercentage;
             
             return (
               <div key={data.month} className="flex flex-col items-center space-y-2 flex-1">
@@ -56,7 +65,7 @@ export default function SpendingChart() {
                         ? 'bg-red-500' 
                         : 'bg-primary'
                   }`}
-                  style={{ height: `${heightPercentage}%` }}
+                  style={{ height: `${displayHeight}%` }}
                   title={`${data.name}: $${data.spending.toFixed(2)}`}
                 ></div>
                 <span className={`text-xs ${isCurrentMonth ? 'font-medium text-orange-600' : 'text-gray-600'}`}>

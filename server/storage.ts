@@ -97,7 +97,9 @@ export class MemStorage implements IStorage {
 
   async getMonthlySpending(year: number, month: number): Promise<number> {
     const startDate = `${year}-${month.toString().padStart(2, '0')}-01`;
-    const endDate = `${year}-${month.toString().padStart(2, '0')}-31`;
+    // Get the last day of the month properly
+    const lastDay = new Date(year, month, 0).getDate();
+    const endDate = `${year}-${month.toString().padStart(2, '0')}-${lastDay.toString().padStart(2, '0')}`;
     const monthlyExpenses = await this.getExpensesByDateRange(startDate, endDate);
     return monthlyExpenses.reduce((total, expense) => total + parseFloat(expense.amount), 0);
   }

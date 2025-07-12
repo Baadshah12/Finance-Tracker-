@@ -46,7 +46,9 @@ export default function ExpenseForm() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/expenses"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/analytics/summary"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/analytics/categories"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/analytics/monthly-trends"] });
       form.reset({
         amount: "",
         category: "",
