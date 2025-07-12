@@ -8,7 +8,7 @@ interface FinancialSummary {
   weeklySpending: number;
   monthlyChange: number;
   weeklyChange: number;
-  savingsGoal: number;
+  savingsPercentage: number;
 }
 
 export default function FinancialOverview() {
@@ -105,14 +105,14 @@ export default function FinancialOverview() {
         </CardContent>
       </Card>
 
-      {/* Savings Goal Card */}
+      {/* Savings Percentage Card */}
       <Card className="bg-white rounded-xl shadow-sm border border-gray-200">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Savings Goal</p>
+              <p className="text-sm font-medium text-gray-600">Savings Remaining</p>
               <p className="text-2xl font-bold text-green-600">
-                {summary.savingsGoal}%
+                {summary.savingsPercentage.toFixed(1)}%
               </p>
             </div>
             <div className="p-3 bg-orange-50 rounded-lg">
@@ -123,7 +123,7 @@ export default function FinancialOverview() {
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
                 className="bg-green-600 h-2 rounded-full transition-all duration-300" 
-                style={{ width: `${summary.savingsGoal}%` }}
+                style={{ width: `${summary.savingsPercentage}%` }}
               ></div>
             </div>
           </div>

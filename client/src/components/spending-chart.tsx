@@ -44,25 +44,30 @@ export default function SpendingChart() {
     <Card className="bg-white rounded-xl shadow-sm border border-gray-200">
       <CardContent className="p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-6">Monthly Spending Trends</h3>
-        <div className="h-64 flex items-end justify-between space-x-2">
+        <div className="h-64 flex items-end justify-between space-x-1">
           {chartData.map((data) => {
             const heightPercentage = maxSpending > 0 ? (data.spending / maxSpending) * 100 : 0;
             const isCurrentMonth = data.month === currentMonth;
             
-            // Ensure minimum visible height for bars with spending
-            const displayHeight = data.spending > 0 ? Math.max(heightPercentage, 8) : heightPercentage;
+            // Ensure minimum visible height for bars with spending - increased minimum height
+            const displayHeight = data.spending > 0 ? Math.max(heightPercentage, 15) : 2;
             
             return (
               <div key={data.month} className="flex flex-col items-center space-y-2 flex-1">
                 <div 
-                  className={`w-full max-w-12 rounded-t transition-all duration-300 ${
-                    isCurrentMonth 
-                      ? 'bg-orange-500' 
-                      : data.spending > (maxSpending * 0.8) 
-                        ? 'bg-red-500' 
-                        : 'bg-primary'
+                  className={`w-full max-w-8 rounded-t transition-all duration-300 ${
+                    data.spending > 0
+                      ? isCurrentMonth 
+                        ? 'bg-orange-500' 
+                        : data.spending > (maxSpending * 0.8) 
+                          ? 'bg-red-500' 
+                          : 'bg-primary'
+                      : 'bg-gray-200'
                   }`}
-                  style={{ height: `${displayHeight}%` }}
+                  style={{ 
+                    height: `${displayHeight}%`,
+                    minHeight: data.spending > 0 ? '12px' : '2px'
+                  }}
                   title={`${data.name}: $${data.spending.toFixed(2)}`}
                 ></div>
                 <span className={`text-xs ${isCurrentMonth ? 'font-medium text-orange-600' : 'text-gray-600'}`}>

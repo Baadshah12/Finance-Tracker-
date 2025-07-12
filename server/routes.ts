@@ -147,13 +147,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ? ((weeklySpending - prevWeekSpending) / prevWeekSpending * 100)
         : 0;
 
+      // Calculate total balance (starting balance minus total spending)
+      const startingBalance = 5000; // Starting balance
+      const totalSpent = await storage.getTotalSpending();
+      const totalBalance = startingBalance - totalSpent;
+      
+      // Calculate savings percentage (remaining balance / starting balance * 100)
+      const savingsPercentage = (totalBalance / startingBalance) * 100;
+
       res.json({
-        totalBalance: 3247.85, // Mock value for now
+        totalBalance,
         monthlySpending,
         weeklySpending,
         monthlyChange,
         weeklyChange,
-        savingsGoal: 68, // Mock percentage
+        savingsPercentage: Math.max(0, savingsPercentage), // Ensure it doesn't go negative
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch financial summary" });
