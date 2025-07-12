@@ -37,11 +37,8 @@ export default function SpendingChart() {
   const maxSpending = Math.max(...monthlyData.map(d => d.spending));
   const currentMonth = new Date().getMonth() + 1;
   
-  // Filter out months with no spending for a cleaner view, but always show current month
-  const displayData = monthlyData.filter(d => d.spending > 0 || d.month === currentMonth);
-  
-  // If no data to display, show last 6 months
-  const chartData = displayData.length > 0 ? displayData : monthlyData.slice(-6);
+  // Show all months but highlight ones with spending
+  const chartData = monthlyData;
 
   return (
     <Card className="bg-white rounded-xl shadow-sm border border-gray-200">
